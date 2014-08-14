@@ -1,5 +1,10 @@
 #cloud-config
+# https://raw.githubusercontent.com/deis/deis/master/contrib/coreos/user-data
 ---
+ssh_authorized_keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDL4y0AIaPr6IuT2YHhvPmb2h2e+tq0IqjcCdVIOInLAi6ZEpml9s/bVxCHPVeGXoKn0HNdPQtRY5gRgGPGx8LzyvALkG6tBhZ69dAzo8f5OSAUVyLASx+4jfEa23ZFKYgJSJF+8+galF
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD9P8+m8bH8MnfHIekr6wuDXMqU9cHkTFm76wa6abgzXek/v9s3V9ic2O0QPTZjd0zrYjvfmZ9ClmxehzccVTp4foPJM+gMVs83P9bKINfoCCQ1eJOXhnqJAOMX0ntg1uI2xlqobZzIxI
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCfAB5zEw7V9c+Nv2MMO0sIY3fFeYDRSFBnZsllU3PNDVJtEeAWq2VR1OkKR234KoPX6ZccRzq8becg3XqhSg6mu1Zz2wjj0eVvNUaEypj/+tqgHIFq9UyAUXT4lBJE7jY+Kk3w7q0MsT
 coreos:
   etcd:
     # generate a new token for each unique cluster from https://discovery.etcd.io/new
