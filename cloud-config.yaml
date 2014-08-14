@@ -1,21 +1,15 @@
 #cloud-config
 ---
-ssh_authorized_keys:
-  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDL4y0AIaPr6IuT2YHhvPmb2h2e+tq0IqjcCdVIOInLAi6ZEpml9s/bVxCHPVeGXoKn0HNdPQtRY5gRgGPGx8LzyvALkG6tBhZ69dAzo8f5OSAUVyLASx+4jfEa23ZFKYgJSJF+8+galFXOC616jE6bNaKXgDe+kTsSNFNkGBQPBBXKFT1IMz5+7hPb3u0GQU001OjWN//DVHf9QkA7VDHM1AQZJ2J94WnMwaMTyXVrSwsmZZe/fm+/6LzRqXnxBD8cxZw85C7yYOxxrxJcQDzheNNhnvtwKZsi3VfQ+ozE2o2kiinY4Rezd51Rh/sRah7ssunzATfLrAI7/MQn+t9z matt
-  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD9P8+m8bH8MnfHIekr6wuDXMqU9cHkTFm76wa6abgzXek/v9s3V9ic2O0QPTZjd0zrYjvfmZ9ClmxehzccVTp4foPJM+gMVs83P9bKINfoCCQ1eJOXhnqJAOMX0ntg1uI2xlqobZzIxITFOqKUGKkDMkGhx54DTmcGdCi546G8V7cI78Bl+rhdfTI60uMsjBfPvIwnkYmsz1fB/1c9Aw3R6mv7I/moQglKqjTZMPsM6wcXHJzdvJcowyoNg4W+t4mzrt5XB726hbiP9y/bvUrXeAA84EsShsB5evAALkeAjSzhSF03iRiq0d8opZanVxtTtOBPicACgx5+u8V3YSrt mike
-  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCfAB5zEw7V9c+Nv2MMO0sIY3fFeYDRSFBnZsllU3PNDVJtEeAWq2VR1OkKR234KoPX6ZccRzq8becg3XqhSg6mu1Zz2wjj0eVvNUaEypj/+tqgHIFq9UyAUXT4lBJE7jY+Kk3w7q0MsTBZD2jxPhWTwQD1QLSzQ8Or2QyI2g5JnWvhuBt/FIF/+7icbdMw7B2XXgG+yUdfrEWoUgo6YJBIWF4g6/Iqz5wkG6MHXFExtEKUGt0EBfxPQGKvqWbJH2pmfkfAQwE9nbsWuW5Ntov350t7y6WaBFSjtCMS+qVeFQdo+wYdCjwr24gV0uUE7ng/AH8tA8jdF6bI0a074Is7 thomas
 coreos:
   etcd:
     # generate a new token for each unique cluster from https://discovery.etcd.io/new
-    # uncomment the following line and replace it with your discovery URL
-    # discovery: https://discovery.etcd.io/12345693838asdfasfadf13939923
-    discovery: https://discovery.etcd.io/f709dafc90f9e36c53ebb89d0ffd85f5
-    addr: 192.168.1.50:4001
-    peer-addr: 192.168.1.50:7001
+    discovery: https://discovery.etcd.io/bb2627ddbd1597a95bde124cc719b57f
+    addr: $private_ipv4:4001
+    peer-addr: $private_ipv4:7001
   fleet:
     # We have to set the public_ip here so this works on Vagrant -- otherwise, Vagrant VMs
     # will all publish the same private IP. This is harmless for cloud providers.
-    public_ip: 192.168.1.50
+    public_ip: $private_ipv4
   units:
   - name: etcd.service
     command: start
@@ -38,13 +32,13 @@ write_files:
   - path: /etc/motd
     content: " \e[31m* *    \e[34m*   \e[32m*****    \e[39mddddd   eeeeeee iiiiiii   ssss\n\e[31m*   *  \e[34m* *  \e[32m*   *     \e[39md   d   e    e    i     s    s\n \e[31m* *  \e[34m***** \e[32m*****     \e[39md    d  e         i    s\n\e[32m*****  \e[31m* *    \e[34m*       \e[39md     d e         i     s\n\e[32m*   * \e[31m*   *  \e[34m* *      \e[39md     d eee       i      sss\n\e[32m*****  \e[31m* *  \e[34m*****     \e[39md     d e         i         s\n  \e[34m*   \e[32m*****  \e[31m* *      \e[39md    d  e         i          s\n \e[34m* *  \e[32m*   * \e[31m*   *     \e[39md   d   e    e    i    s    s\n\e[34m***** \e[32m*****  \e[31m* *     \e[39mddddd   eeeeeee iiiiiii  ssss\n\n\e[39mWelcome to Deis\t\t\tPowered by Core\e[38;5;45mO\e[38;5;206mS\e[39m\n"
   - path: /etc/profile.d/nse-function.sh
-    permissions: 0755
+    permissions: '0755'
     content: |
       function nse() {
         sudo nsenter --pid --uts --mount --ipc --net --target $(docker inspect --format="{{ .State.Pid }}" $1)
       }
   - path: /run/deis/bin/get_image
-    permissions: 0755
+    permissions: '0755'
     content: |
       #!/bin/bash
       # usage: get_image <component_path>
