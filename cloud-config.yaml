@@ -31,6 +31,13 @@ coreos:
       ExecStart=/usr/bin/systemctl stop update-engine.service
       ExecStartPost=/usr/bin/systemctl mask update-engine.service
 write_files:
+  # https://github.com/coreos/bugs/issues/40
+  # PHYSICAL SERVER HACK, DONT NEED IN CLOUD
+  - path: /etc/environment
+    permissions: 0644
+    content: |
+      COREOS_PUBLIC_IPV4=<put your ip here>
+      COREOS_PRIVATE_IPV4=<put your ip here>
   - path: /etc/deis-release
     content: |
       DEIS_RELEASE=latest
